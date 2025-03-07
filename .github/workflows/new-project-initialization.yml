@@ -1,0 +1,53 @@
+name: New project initialization
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        required: true
+        type: string
+        description: "Name of the project to be created"
+
+jobs:
+  new-project-initialization:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Git setup
+        run: |
+          git config --global user.name "Khader Basha Dudekula"
+          git config --global user.email "dkhaderbasha1998@gmail.com"
+          
+      - name: Create code files
+        run: |
+          mkdir -p ${{ inputs.project-name }}
+          touch ${{ inputs.project-name }}/README.md
+          touch ${{ inputs.project-name }}/main.go
+          mkdir -p ${{ inputs.project-name }}/docs
+          touch ${{ inputs.project-name }}/docs/BUSINESS-CONTINUITY.md
+          
+      - name: Create terraform code files
+        run: |
+          mkdir -p terraform/layers/application/${{ inputs.project-name }}
+          touch terraform/layers/application/${{ inputs.project-name }}/main.tf
+          touch terraform/layers/application/${{ inputs.project-name }}/vars.tf
+          touch terraform/layers/application/${{ inputs.project-name }}/versions.tf
+          mkdir -p terraform/layers/service/${{ inputs.project-name }}
+          touch terraform/layers/service/${{ inputs.project-name }}/main.tf
+          touch terraform/layers/service/${{ inputs.project-name }}/vars.tf
+          touch terraform/layers/service/${{ inputs.project-name }}/versions.tf          
+          
+      # Runs a set of commands using the runners shell
+      - name: Commit and Push Changes
+        run: |
+          git status
+          git add ${{ inputs.project-name }}*
+          git add terraform/layers/application/${{ inputs.project-name }}*
+          git add terraform/layers/service/${{ inputs.project-name }}*
+          git commit -m "${{ inputs.project-name }} intialization"
+          git push
