@@ -45,22 +45,22 @@ jobs:
           touch ${{ inputs.project-name }}/main.go
 
       - name: Create README file
-        if: ${{ inputs.include-readme == "yes" }}
+        if: ${{ inputs.include-readme == 'yes' }}
         run: |
           touch ${{ inputs.project-name }}/README.md
 
       - name: Create .gitignore file
-        if: ${{ inputs.include-gitignore == "yes" }}
+        if: ${{ inputs.include-gitignore == 'yes' }}
         run: |
           touch ${{ inputs.project-name }}/.gitignore
 
       - name: Create codeowners file
-        if: ${{ inputs.include-codeowners == "yes" }}
+        if: ${{ inputs.include-codeowners == 'yes' }}
         run: |
           touch ${{ inputs.project-name }}/.gitignore
           
       - name: Create terraform code files
-        if: ${{ inputs.need-terraform == "yes" }}
+        if: ${{ inputs.need-terraform == 'yes' }}
         run: |
           mkdir -p terraform/layers/application/${{ inputs.project-name }}
           touch terraform/layers/application/${{ inputs.project-name }}/main.tf
