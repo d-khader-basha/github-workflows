@@ -7,6 +7,22 @@ on:
         required: true
         type: string
         description: "Name of the project to be created"
+      include-readme:
+        required: true
+        type: string
+        description: "whether to add readme file or not"
+      include-gitignore:
+        required: true
+        type: string
+        description: "whether to add gitignore file or not"        
+      include-codeowners:
+        required: true
+        type: string
+        description: "whether to add codeowners file or not" 
+      include-terraform:
+        required: true
+        type: string
+        description: "whether to add terraform related files or not"         
 
 jobs:
   new-project-initialization:
@@ -20,18 +36,31 @@ jobs:
 
       - name: Git setup
         run: |
-          git config --global user.name "Khader Basha Dudekula"
-          git config --global user.email "dkhaderbasha1998@gmail.com"
+          git config --global user.name "khader-github-actions"
+          git config --global user.email "khader-github-actions@abc.com"
           
-      - name: Create code files
+      - name: Create new project and go code files
         run: |
           mkdir -p ${{ inputs.project-name }}
-          touch ${{ inputs.project-name }}/README.md
           touch ${{ inputs.project-name }}/main.go
-          mkdir -p ${{ inputs.project-name }}/docs
-          touch ${{ inputs.project-name }}/docs/BUSINESS-CONTINUITY.md
+
+      - name: Create README file
+        if: ${{ inputs.include-readme == 'yes' }}
+        run: |
+          touch ${{ inputs.project-name }}/README.md
+
+      - name: Create .gitignore file
+        if: ${{ inputs.include-gitignore == 'yes' }}
+        run: |
+          touch ${{ inputs.project-name }}/.gitignore
+
+      - name: Create codeowners file
+        if: ${{ inputs.include-codeowners == 'yes' }}
+        run: |
+          touch ${{ inputs.project-name }}/CODEOWNERS
           
       - name: Create terraform code files
+        if: ${{ inputs.include-terraform == 'yes' }}
         run: |
           mkdir -p terraform/layers/application/${{ inputs.project-name }}
           touch terraform/layers/application/${{ inputs.project-name }}/main.tf
