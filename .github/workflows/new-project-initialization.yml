@@ -19,7 +19,7 @@ on:
         required: true
         type: string
         description: "whether to add codeowners file or not" 
-      need-terraform:
+      include-terraform:
         required: true
         type: string
         description: "whether to add terraform related files or not"         
@@ -60,7 +60,7 @@ jobs:
           touch ${{ inputs.project-name }}/CODEOWNERS
           
       - name: Create terraform code files
-        if: ${{ inputs.need-terraform == 'yes' }}
+        if: ${{ inputs.include-terraform == 'yes' }}
         run: |
           mkdir -p terraform/layers/application/${{ inputs.project-name }}
           touch terraform/layers/application/${{ inputs.project-name }}/main.tf
