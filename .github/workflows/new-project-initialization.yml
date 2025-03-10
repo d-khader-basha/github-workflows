@@ -57,7 +57,7 @@ jobs:
       - name: Create codeowners file
         if: ${{ inputs.include-codeowners == 'yes' }}
         run: |
-          touch ${{ inputs.project-name }}/.gitignore
+          touch ${{ inputs.project-name }}/CODEOWNERS
           
       - name: Create terraform code files
         if: ${{ inputs.need-terraform == 'yes' }}
