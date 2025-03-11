@@ -38,11 +38,20 @@ jobs:
         run: |
           git config --global user.name "khader-github-actions"
           git config --global user.email "khader-github-actions@abc.com"
+
+      - name: Go setup
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
           
-      - name: Create new project and go code files
+      - name: Create go new project folder
         run: |
           mkdir -p ${{ inputs.project-name }}
-          touch ${{ inputs.project-name }}/main.go
+          cd ${{ inputs.project-name }}
+          touch main.go
+          go mod init
+          go mod tidy
+          cd ..
 
       - name: Create README file
         if: ${{ inputs.include-readme == 'yes' }}
