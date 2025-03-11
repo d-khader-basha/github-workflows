@@ -6,11 +6,14 @@ on:
       project-name:
         required: true
         type: string
-        description: "Name of the project to be created"
-      include-readme:
+      go-version:
+        required: true
+        type: string        
+        description: "Version of the go lang"
+      include-readme-and-business-continuity:
         required: true
         type: string
-        description: "whether to add readme file or not"
+        description: "whether to add readme and business continuity file or not"
       include-gitignore:
         required: true
         type: string
@@ -38,16 +41,26 @@ jobs:
         run: |
           git config --global user.name "khader-github-actions"
           git config --global user.email "khader-github-actions@abc.com"
+
+      - name: Go setup
+        uses: actions/setup-go@v5
+        with:
+          go-version: '${{ inputs.go-version }}'
           
-      - name: Create new project and go code files
+      - name: Create go new project folder
         run: |
           mkdir -p ${{ inputs.project-name }}
-          touch ${{ inputs.project-name }}/main.go
+          cd ${{ inputs.project-name }}
+          touch main.go
+          go mod init ${{ inputs.project-name }}
+          cd ..
 
-      - name: Create README file
-        if: ${{ inputs.include-readme == 'yes' }}
+      - name: Create README and BUSINESS-CONTINUITY file
+        if: ${{ inputs.include-readme-and-business-continuity == 'yes' }}
         run: |
           touch ${{ inputs.project-name }}/README.md
+          mkdir -p ${{ inputs.project-name }}/docs
+          touch ${{ inputs.project-name }}/docs/BUSINESS-CONTINUITY.md
 
       - name: Create .gitignore file
         if: ${{ inputs.include-gitignore == 'yes' }}
@@ -58,6 +71,11 @@ jobs:
         if: ${{ inputs.include-codeowners == 'yes' }}
         run: |
           touch ${{ inputs.project-name }}/CODEOWNERS
+
+      - name: Create docker files
+        run: 
+          touch ${{ inputs.project-name }}/docker-compose.cd.yml
+          touch ${{ inputs.project-name }}/Dockerfile.cd
           
       - name: Create terraform code files
         if: ${{ inputs.include-terraform == 'yes' }}
