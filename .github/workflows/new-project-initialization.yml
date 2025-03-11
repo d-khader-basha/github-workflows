@@ -6,7 +6,10 @@ on:
       project-name:
         required: true
         type: string
-        description: "Name of the project to be created"
+      go-version:
+        required: true
+        type: string        
+        description: "Version of the go lang"
       include-readme:
         required: true
         type: string
@@ -42,7 +45,7 @@ jobs:
       - name: Go setup
         uses: actions/setup-go@v5
         with:
-          go-version: '1.21'
+          go-version: '${{ inputs.go-version }}'
           
       - name: Create go new project folder
         run: |
@@ -50,7 +53,6 @@ jobs:
           cd ${{ inputs.project-name }}
           touch main.go
           go mod init ${{ inputs.project-name }}
-          go mod tidy
           cd ..
 
       - name: Create README file
