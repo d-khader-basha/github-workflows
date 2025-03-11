@@ -49,7 +49,7 @@ jobs:
           mkdir -p ${{ inputs.project-name }}
           cd ${{ inputs.project-name }}
           touch main.go
-          go mod init
+          go mod init ${{ inputs.project-name }}
           go mod tidy
           cd ..
 
